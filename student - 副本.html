@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>学生 - 大学生体质测试管理系统</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        /* 顶部导航栏样式 */
+        .navbar {
+            background-color: #4b5cc4 !important;
+            padding: 0.5rem 2rem;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-size: 1.1rem;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            background-color: #fff;
+            min-height: calc(100vh - 56px);
+            padding: 20px 0;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar a {
+            color: #666;
+            padding: 12px 20px;
+            display: block;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #f0f2ff;
+            color: #4b5cc4;
+            border-left: 3px solid #4b5cc4;
+        }
+
+        /* 主要内容区域样式 */
+        .main-content {
+            padding: 30px;
+            min-height: calc(100vh - 56px);
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            color: #4b5cc4;
+            border-bottom: 2px solid #f0f2ff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        #cameraContainer {
+            width: 100%;
+            height: 400px;
+            /* 设置固定高度，可根据页面布局调整 */
+            position: relative;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            /* 填充容器，可能轻微变形但完整显示 */
+            /* 或使用 object-fit: cover; 裁剪显示完整画面 */
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+
+        .user-info img {
+            width: 40px;
+            /* 修改顶部导航栏头像宽度 */
+            height: 40px;
+            /* 修改顶部导航栏头像高度 */
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .btn-custom {
+            background-color: #4b5cc4;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+        }
+
+        .btn-custom:hover {
+            background-color: #3f4da8;
+            color: white;
+        }
+	
+	.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    color: white;
+}
+
+        /* 新增个人信息卡片头像样式 */
+        .personal-info-avatar {
+            width: 120px;
+            height: 120px;
+	 object-fit: cover; /* 确保图片填充容器并保持比例 */
+    	border-radius: 50%; /* 如果需要圆形图片 */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar navbar-expand-lg">
+        <span class="navbar-brand">苏高敏的系统</span>
+        <div class="user-info ml-auto">
+            <img src="https://tse3-mm.cn.bing.net/th/id/OIP-C.mPdvq3KzeG9nnl03NzLLDQHaE3?rs=1&pid=ImgDetMain"
+                alt="用户头像">
+            <span>学生用户</span>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏 -->
+            <div class="col-md-2 sidebar">
+                <a href="#" class="active">
+                    <i class="fas fa-home"></i> 首页
+                </a>
+                <a href="#">
+                    <i class="fas fa-user"></i> 个人中心
+                </a>
+                <a href="#">体测项目管理</a>
+                <a href="#">运动处方管理</a>
+                <a href="#">活动力分析</a>
+                <a href="#">成绩管理</a>
+                <a href="#">统计管理</a>
+                <a href="#" id="startCamera">体质测试</a>
+            </div>
+
+            <!-- 主要内容区域 -->
+            <div class="col-md-10 main-content">
+                <!-- 欢迎卡片 -->
+                <div class="card welcome-card" style="margin-bottom: 30px;">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <h5 class="card-title mr-3">欢迎使用学生系统</h5>
+                            <p class="text-muted mb-0">当前用户：苏高敏</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- 四个卡片区域 -->
+                <div class="row">
+                    <!-- 个人信息 -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">个人信息</h5>
+                                <div class="text-center mb-3">
+                                    <img class="personal-info-avatar"  src="https://tse3-mm.cn.bing.net/th/id/OIP-C.mPdvq3KzeG9nnl03NzLLDQHaE3?rs=1&pid=ImgDetMain"  alt="用户头像">
+                                </div>
+                                <div class="mt-3">
+                                    <p class="mb-2"><strong>学号：</strong> 202141624</p>
+                                    <p class="mb-2"><strong>姓名：</strong> 苏高敏</p>
+                                    <p class="mb-2"><strong>班级：</strong> 测控211</p>
+                                    <p class="mb-2"><strong>专业：</strong> 测控技术与仪器</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 体质测试卡片 -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">体质测试</h5>
+                                <div id="cameraContainer" style="display: none;">
+                                    <video id="video" autoplay></video>
+                                </div>
+                                <div id="testButtonContainer" class="text-center py-3">
+                                    <button id="testButton" class="btn btn-primary" onclick="toggleCamera()">
+                                        开始体质测试
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 运动处方建议 -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">运动处方建议</h5>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2">✓ 每周进行3-4次有氧运动</li>
+                                    <li class="mb-2">✓ 每次运动时间30-40分钟</li>
+                                    <li class="mb-2">✓ 建议进行：跑步、游泳、骑行</li>
+                                    <li class="mb-2">✓ 注意运动强度循序渐进</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 活动力分析 -->
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">活动力分析</h5>
+                                <div class="activity-stats">
+                                    <div class="stat-item mb-4">
+                                        <h6 class="text-muted">本周运动数据</h6>
+                                        <p class="mb-2"><i class="fas fa-clock text-primary"></i> 总运动时长：8小时</p>
+                                        <p class="mb-2"><i class="fas fa-walking text-success"></i> 平均每日步数：8000步</p>
+                                        <p class="mb-2"><i class="fas fa-fire text-danger"></i> 消耗热量：2400千卡</p>
+                                    </div>
+                                    <div class="stat-item">
+                                        <h6 class="text-muted">运动达标情况</h6>
+                                        <p class="mb-2">✓ 本周运动次数：4次</p>
+                                        <p class="mb-2">✓ 达标天数：5天</p>
+                                        <p class="mb-2">✓ 运动强度：中等</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-code.js"></script>
+    <script>
+        let isCameraOn = false;
+        let stream;
+
+        function toggleCamera() {
+            const cameraContainer = document.getElementById('cameraContainer');
+            const video = document.getElementById('video');
+            const testButton = document.getElementById('testButton');
+
+            if (isCameraOn) {
+                // 关闭摄像头
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                video.srcObject = null;
+                cameraContainer.style.display = 'none';
+                testButton.textContent = '开始体质测试';
+		testButton.classList.remove('btn-danger');
+   		 testButton.classList.add('btn-primary');
+                isCameraOn = false;
+            } else {
+                // 打开摄像头
+                navigator.mediaDevices.getUserMedia({ video: true })
+                   .then((newStream) => {
+                        stream = newStream;
+                        video.srcObject = stream;
+                        cameraContainer.style.display = 'block';
+                        testButton.textContent = '结束测试';
+			testButton.classList.remove('btn-primary');
+           		 testButton.classList.add('btn-danger');
+                        isCameraOn = true;
+                    })
+                   .catch((err) => {
+                        alert('无法访问摄像头：' + err.message);
+                    });
+            }
+        }
+    </script>
+    <!-- 在其他脚本引用后添加 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </body>
+
+</html>
