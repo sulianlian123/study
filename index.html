@@ -305,7 +305,7 @@
           try {
             // 1) 启动后端摄像头逻辑
             const startRes = await fetch(
-              "http://localhost:5000/control-camera",
+              "https://8e10-123-112-11-208.ngrok-free.app/control-camera",
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -317,13 +317,13 @@
 
             // 2) 显示 <img>，指向 /video_feed
             cameraContainer.style.display = "block";
-            videoFeed.src = "http://localhost:5000/video_feed";
+            videoFeed.src = "https://8e10-123-112-11-208.ngrok-free.app/video_feed";
             testButton.textContent = "停止测试";
             isCameraOn = true;
 
             // 3) 开始轮询计数（GET /control-camera）
             intervalId = setInterval(async () => {
-              const res = await fetch("http://localhost:5000/control-camera");
+              const res = await fetch("https://8e10-123-112-11-208.ngrok-free.app/control-camera");
               if (res.ok) {
                 const status = await res.json();
                 document.getElementById(
@@ -348,7 +348,7 @@
           isCameraOn = false;
 
           // 通知后端停止
-          const response = await fetch("http://localhost:5000/control-camera", {
+          const response = await fetch("https://8e10-123-112-11-208.ngrok-free.app/control-camera", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ action: "stop" }),
