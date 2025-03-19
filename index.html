@@ -17,7 +17,6 @@
         background-color: #4b5cc4 !important;
         padding: 0.5rem 2rem;
       }
-
       .navbar-brand {
         color: white !important;
         font-size: 1.1rem;
@@ -30,7 +29,6 @@
         padding: 20px 0;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
       }
-
       .sidebar a {
         color: #666;
         padding: 12px 20px;
@@ -39,7 +37,6 @@
         font-size: 0.9rem;
         border-left: 3px solid transparent;
       }
-
       .sidebar a:hover,
       .sidebar a.active {
         background-color: #f0f2ff;
@@ -52,17 +49,14 @@
         padding: 30px;
         min-height: calc(100vh - 56px);
       }
-
       .card {
         border: none;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s;
       }
-
       .card:hover {
         transform: translateY(-5px);
       }
-
       .card-title {
         color: #4b5cc4;
         border-bottom: 2px solid #f0f2ff;
@@ -78,15 +72,6 @@
         overflow: hidden;
         margin: 1rem 0;
       }
-
-      #video {
-        width: 100%;
-        height: 100%;
-        object-fit: fill;
-        /* 填充容器，可能轻微变形但完整显示 */
-        /* 或使用 object-fit: cover; 裁剪显示完整画面 */
-      }
-
       #videoFeed {
         width: 100%;
         height: 100%;
@@ -98,12 +83,9 @@
         align-items: center;
         color: white;
       }
-
       .user-info img {
         width: 40px;
-        /* 修改顶部导航栏头像宽度 */
         height: 40px;
-        /* 修改顶部导航栏头像高度 */
         border-radius: 50%;
         margin-right: 10px;
       }
@@ -115,17 +97,14 @@
         padding: 8px 20px;
         border-radius: 4px;
       }
-
       .btn-custom:hover {
         background-color: #3f4da8;
         color: white;
       }
-
       .btn-danger {
         background-color: #dc3545;
         color: white;
       }
-
       .btn-danger:hover {
         background-color: #c82333;
         color: white;
@@ -135,8 +114,8 @@
       .personal-info-avatar {
         width: 120px;
         height: 120px;
-        object-fit: cover; /* 确保图片填充容器并保持比例 */
-        border-radius: 50%; /* 如果需要圆形图片 */
+        object-fit: cover;
+        border-radius: 50%;
       }
     </style>
   </head>
@@ -158,8 +137,8 @@
       <div class="row">
         <!-- 侧边栏 -->
         <div class="col-md-2 sidebar">
-          <a href="#" class="active"> <i class="fas fa-home"></i> 首页 </a>
-          <a href="#"> <i class="fas fa-user"></i> 个人中心 </a>
+          <a href="#" class="active"><i class="fas fa-home"></i> 首页</a>
+          <a href="#"><i class="fas fa-user"></i> 个人中心</a>
           <a href="#">体测项目管理</a>
           <a href="#">运动处方管理</a>
           <a href="#">活动力分析</a>
@@ -208,9 +187,13 @@
               <div class="card h-100">
                 <div class="card-body">
                   <h5 class="card-title">体质测试</h5>
-                  <!-- 修改原video元素为img元素 -->
+                  <!-- 使用 img 元素显示视频流 -->
                   <div id="cameraContainer" style="display: none">
-                    <img id="videoFeed" src="https://c79d-123-112-11-208.ngrok-free.app/video_feed" />
+                    <img
+                      id="videoFeed"
+                      src="https://c79d-123-112-11-208.ngrok-free.app/video_feed"
+                      alt="视频流"
+                    />
                   </div>
                   <div id="testButtonContainer" class="text-center py-3">
                     <button
@@ -239,7 +222,8 @@
                 </div>
               </div>
             </div>
-            <!-- 在原有HTML中添加以下元素 -->
+
+            <!-- 实时分析 -->
             <div class="analysis-panel">
               <h5>实时分析</h5>
               <div id="resultDisplay" class="alert alert-info">
@@ -253,6 +237,7 @@
                 </div>
               </div>
             </div>
+
             <!-- 活动力分析 -->
             <div class="col-md-6">
               <div class="card h-100">
@@ -291,6 +276,7 @@
 
     <!-- 脚本 -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- 请替换以下 FontAwesome 的引用为你自己的有效代码 -->
     <script src="https://kit.fontawesome.com/your-code.js"></script>
     <script>
       let isCameraOn = false;
@@ -303,7 +289,7 @@
 
         if (!isCameraOn) {
           try {
-            // 1) 启动后端摄像头逻辑
+            // 1) 启动后端摄像头逻辑，返回 JSON 数据
             const startRes = await fetch(
               "https://c79d-123-112-11-208.ngrok-free.app/control-camera",
               {
@@ -315,23 +301,19 @@
             const startStatus = await startRes.json();
             console.log("启动摄像头：", startStatus);
 
-            // 2) 显示 <img>，指向 /video_feed
+            // 2) 显示视频流 —— 直接设置 img 的 src 属性加载视频流
             cameraContainer.style.display = "block";
             videoFeed.src = "https://c79d-123-112-11-208.ngrok-free.app/video_feed";
             testButton.textContent = "停止测试";
             isCameraOn = true;
 
-            // 3) 开始轮询计数（GET /control-camera）
+            // 3) 开始轮询计数（GET /control-camera），该接口返回 JSON 数据
             intervalId = setInterval(async () => {
               const res = await fetch("https://c79d-123-112-11-208.ngrok-free.app/control-camera");
               if (res.ok) {
                 const status = await res.json();
-                document.getElementById(
-                  "counter"
-                ).textContent = `当前计数：${status.count}`;
-                document.getElementById(
-                  "progressBar"
-                ).style.width = `${Math.min(status.count * 10, 100)}%`;
+                document.getElementById("counter").textContent = `当前计数：${status.count}`;
+                document.getElementById("progressBar").style.width = `${Math.min(status.count * 10, 100)}%`;
               }
             }, 1000);
           } catch (error) {
@@ -340,19 +322,20 @@
         } else {
           // 停止摄像头 & 停止轮询
           clearInterval(intervalId);
-
-          // 隐藏图像，清空 src
           cameraContainer.style.display = "none";
           videoFeed.src = "";
           testButton.textContent = "开始体质测试";
           isCameraOn = false;
 
           // 通知后端停止
-          const response = await fetch("https://c79d-123-112-11-208.ngrok-free.app/control-camera", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "stop" }),
-          });
+          const response = await fetch(
+            "https://c79d-123-112-11-208.ngrok-free.app/control-camera",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ action: "stop" }),
+            }
+          );
           const data = await response.json();
           alert(`测试结束！总次数：${data.count}`);
         }
